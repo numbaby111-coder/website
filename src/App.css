@@ -11,8 +11,24 @@
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 24px 0 0;
+}
+
+.nav-signup {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 10px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.nav-signup:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 .logo {

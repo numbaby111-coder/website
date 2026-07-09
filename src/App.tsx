@@ -51,6 +51,9 @@ function App() {
             <span className="logo-theory">theory</span>
           </div>
         </div>
+        <a className="nav-signup" href="#/signup">
+          Sign Up
+        </a>
       </motion.nav>
 
       <section className="hero">
