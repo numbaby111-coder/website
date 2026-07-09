@@ -8,6 +8,7 @@ export interface RegisterPayload {
   display_name: string
   age_confirmed: boolean
   account_type: AccountType
+  registration_number?: string
 }
 
 export interface RegisterResult {

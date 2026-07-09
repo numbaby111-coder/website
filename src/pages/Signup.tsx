@@ -85,6 +85,7 @@ export function Signup() {
         display_name: displayName.trim(),
         age_confirmed: ageConfirmed,
         account_type: role!,
+        ...(role !== 'individual' ? { registration_number: regNumber.trim() } : {}),
       })
       setStep('success')
     } catch (err) {
