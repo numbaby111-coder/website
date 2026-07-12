@@ -5,7 +5,11 @@ import { registerAccount, ApiError, type AccountType } from '../lib/api'
 
 type Step = 'role' | 'form' | 'submitting' | 'success'
 
-const ROLE_INFO: Record<AccountType, { title: string; subtitle: string }> = {
+// UI-level role, distinct from the wire-level AccountType: 'contributor' isn't
+// a real account_type — it's account_type 'individual' + wants_contributor: true.
+type UiRole = AccountType | 'contributor'
+
+const ROLE_INFO: Record<UiRole, { title: string; subtitle: string }> = {
   individual: {
     title: 'Customer',
     subtitle: 'Track meals, get a health score, and build better habits.',
@@ -18,7 +22,13 @@ const ROLE_INFO: Record<AccountType, { title: string; subtitle: string }> = {
     title: 'Restaurant / Food Business',
     subtitle: 'List your food and reach health-conscious customers.',
   },
+  contributor: {
+    title: 'Contributor',
+    subtitle: 'Photograph ingredients to help build our training dataset — no credentials needed.',
+  },
 }
+
+const CREDENTIALED_ROLES = new Set<UiRole>(['expert', 'restaurant_provider'])
 
 function PlayStoreBadge({ label = 'Get it on Google Play' }: { label?: string }) {
   return (
@@ -39,7 +49,7 @@ function PlayStoreBadge({ label = 'Get it on Google Play' }: { label?: string })
 
 export function Signup() {
   const [step, setStep] = useState<Step>('role')
-  const [role, setRole] = useState<AccountType | null>(null)
+  const [role, setRole] = useState<UiRole | null>(null)
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,12 +57,13 @@ export function Signup() {
   const [regNumber, setRegNumber] = useState('')
   const [error, setError] = useState('')
 
-  const selectRole = (r: AccountType) => {
+  const selectRole = (r: UiRole) => {
     setRole(r)
     setError('')
     setStep('form')
   }
 
+  const showsRegNumber = role !== null && CREDENTIALED_ROLES.has(role)
   const regNumberLabel =
     role === 'expert' ? 'Professional registration number' : 'FSSAI license number'
   const regNumberHint =
@@ -65,7 +76,7 @@ export function Signup() {
     if (!email.trim() || !email.includes('@')) return 'Please enter a valid email.'
     if (password.length < 8) return 'Password must be at least 8 characters.'
     if (!ageConfirmed) return 'You must confirm you are 18 years or older.'
-    if (role !== 'individual' && !regNumber.trim()) return `Please enter your ${regNumberLabel.toLowerCase()}.`
+    if (showsRegNumber && !regNumber.trim()) return `Please enter your ${regNumberLabel.toLowerCase()}.`
     return ''
   }
 
@@ -79,13 +90,17 @@ export function Signup() {
     setError('')
     setStep('submitting')
     try {
+      // 'contributor' isn't a real account_type — it's 'individual' plus a
+      // stated-interest flag (see numnum-api auth.register_user).
+      const accountType: AccountType = role === 'contributor' ? 'individual' : role!
       await registerAccount({
         email: email.trim().toLowerCase(),
         password,
         display_name: displayName.trim(),
         age_confirmed: ageConfirmed,
-        account_type: role!,
-        ...(role !== 'individual' ? { registration_number: regNumber.trim() } : {}),
+        account_type: accountType,
+        ...(showsRegNumber ? { registration_number: regNumber.trim() } : {}),
+        ...(role === 'contributor' ? { wants_contributor: true } : {}),
       })
       setStep('success')
     } catch (err) {
@@ -113,7 +128,7 @@ export function Signup() {
               <h1 className="signup-title">Create your account</h1>
               <p className="signup-subtitle">First, tell us who you are.</p>
               <div className="role-grid">
-                {(Object.keys(ROLE_INFO) as AccountType[]).map((r) => (
+                {(Object.keys(ROLE_INFO) as UiRole[]).map((r) => (
                   <button
                     key={r}
                     type="button"
@@ -178,7 +193,7 @@ export function Signup() {
                   <small>At least 8 characters.</small>
                 </label>
 
-                {role !== 'individual' && (
+                {showsRegNumber && (
                   <label className="field">
                     <span>{regNumberLabel}</span>
                     <input
@@ -223,6 +238,18 @@ export function Signup() {
                   <p className="signup-subtitle">
                     Your account has been created. Download the app to start tracking meals and
                     building your health score.
+                  </p>
+                  <div className="success-actions">
+                    <PlayStoreBadge />
+                  </div>
+                </>
+              ) : role === 'contributor' ? (
+                <>
+                  <h1 className="signup-title">You're all set!</h1>
+                  <p className="signup-subtitle">
+                    Thanks for wanting to help build our ingredient dataset. Download the app to
+                    start tracking meals — look for the contribute option to start photographing
+                    ingredients.
                   </p>
                   <div className="success-actions">
                     <PlayStoreBadge />
