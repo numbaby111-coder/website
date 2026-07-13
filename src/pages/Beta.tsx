@@ -1,16 +1,9 @@
 import './Beta.css'
 
-const DOWNLOADS_BASE = 'https://api.numnumtheory.com/downloads'
+const APK_URL = 'https://api.numnumtheory.com/downloads/numnum-customer.apk'
+const APP_VERSION = '0.1.0-beta'
 
-function BetaDownloadPage({
-  appName,
-  apkFile,
-  version,
-}: {
-  appName: string
-  apkFile: string
-  version: string
-}) {
+export function Beta() {
   return (
     <div className="beta-page">
       <div className="beta-card">
@@ -22,27 +15,17 @@ function BetaDownloadPage({
           <span>num num theory</span>
         </div>
 
-        <h1 className="beta-title">{appName} — beta</h1>
-        <p className="beta-version">Version {version}</p>
+        <h1 className="beta-title">Customer app — beta</h1>
+        <p className="beta-version">Version {APP_VERSION}</p>
         <p className="beta-subtitle">
           Direct APK download for beta testers. This isn't on Google Play yet — you'll need to
           allow installs from unknown sources on your device.
         </p>
 
-        <a className="beta-download" href={`${DOWNLOADS_BASE}/${apkFile}`}>
+        <a className="beta-download" href={APK_URL}>
           Download APK
         </a>
       </div>
     </div>
-  )
-}
-
-export function Beta() {
-  return <BetaDownloadPage appName="Customer app" apkFile="numnum-customer.apk" version="0.1.0-beta" />
-}
-
-export function BetaContributor() {
-  return (
-    <BetaDownloadPage appName="Contributor app" apkFile="numnum-contributor.apk" version="0.1.0-beta" />
   )
 }
