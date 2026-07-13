@@ -104,9 +104,7 @@ function App() {
             </motion.button>
             <motion.a
               className="download-button"
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#/beta"
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 400, damping: 17 }}
