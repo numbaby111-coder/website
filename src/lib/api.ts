@@ -39,6 +39,32 @@ export interface MeResponse {
   verification_status: 'pending' | 'verified' | 'rejected' | null
 }
 
+export type OrgRole = 'org_admin' | 'expert' | 'receptionist' | 'restaurant_owner' | 'restaurant_staff'
+
+export interface InviteInfo {
+  org_name: string
+  org_type: 'expert_clinic' | 'restaurant_provider'
+  email: string
+  role: OrgRole
+  status: 'pending' | 'accepted' | 'revoked' | 'expired'
+  expires_at: string
+  has_account: boolean
+}
+
+export interface InviteRegisterPayload {
+  password: string
+  display_name: string
+  phone?: string
+  age_confirmed: boolean
+  device_hint?: string
+}
+
+export interface InviteAcceptResult {
+  org_id: string
+  role: OrgRole
+  status: string
+}
+
 export class ApiError extends Error {
   status: number
   constructor(status: number, message: string) {
@@ -78,4 +104,29 @@ export async function getMe(token: string): Promise<MeResponse> {
     headers: { Authorization: `Bearer ${token}` },
   })
   return handleResponse<MeResponse>(res, 'Could not load account')
+}
+
+export async function getInvite(token: string): Promise<InviteInfo> {
+  const res = await fetch(`${API_BASE}/api/org/invite/token/${token}`)
+  return handleResponse<InviteInfo>(res, 'Could not load invite')
+}
+
+export async function registerViaInvite(
+  token: string,
+  payload: InviteRegisterPayload,
+): Promise<RegisterResult> {
+  const res = await fetch(`${API_BASE}/api/org/invite/token/${token}/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  return handleResponse<RegisterResult>(res, 'Registration failed')
+}
+
+export async function acceptInvite(token: string, sessionToken: string): Promise<InviteAcceptResult> {
+  const res = await fetch(`${API_BASE}/api/org/invite/token/${token}/accept`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${sessionToken}` },
+  })
+  return handleResponse<InviteAcceptResult>(res, 'Could not accept invite')
 }
