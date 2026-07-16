@@ -50,6 +50,7 @@ function App() {
             <span className="logo-name">num num</span>
             <span className="logo-theory">theory</span>
           </div>
+          <span className="beta-tag">BETA</span>
         </div>
         <a className="nav-signup" href="#/signup">
           Sign Up

@@ -61,6 +61,17 @@
   color: var(--leaf);
 }
 
+.beta-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--saffron);
+  border: 1.5px solid var(--saffron);
+  border-radius: 999px;
+  padding: 3px 9px;
+  align-self: center;
+}
+
 /* ===== Hero ===== */
 .hero {
   display: flex;
