@@ -15,6 +15,24 @@
   padding: 24px 0 0;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-signin {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  transition: color 0.2s ease;
+}
+
+.nav-signin:hover {
+  color: var(--leaf);
+}
+
 .nav-signup {
   color: var(--ink);
   text-decoration: none;
@@ -668,6 +686,8 @@
 
   .navbar {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
     padding: 20px 0 0;
   }
 

@@ -52,9 +52,14 @@ function App() {
           </div>
           <span className="beta-tag">BETA</span>
         </div>
-        <a className="nav-signup" href="#/signup">
-          Sign Up
-        </a>
+        <div className="nav-actions">
+          <a className="nav-signin" href="#/signin">
+            Sign In
+          </a>
+          <a className="nav-signup" href="#/signup">
+            Sign Up
+          </a>
+        </div>
       </motion.nav>
 
       <section className="hero">
