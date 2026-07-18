@@ -87,6 +87,24 @@
   transform: translateY(-1px);
 }
 
+.downloads-link-secondary {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--leaf);
+  background: var(--accent-bg);
+  border: 1.5px solid var(--accent-border);
+  border-radius: 12px;
+  padding: 12px 20px;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.downloads-link-secondary:hover {
+  transform: translateY(-1px);
+}
+
 .downloads-badge-disabled {
   font-family: inherit;
   font-size: 13px;
@@ -107,6 +125,7 @@
   }
 
   .downloads-button,
+  .downloads-link-secondary,
   .downloads-badge-disabled {
     text-align: center;
   }

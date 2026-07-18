@@ -8,6 +8,7 @@ type LoadState = 'loading' | 'ready' | 'error'
 
 const EXPERT_APK_URL = 'https://api.numnumtheory.com/downloads/numnum-expert.apk'
 const CONTRIBUTOR_APK_URL = 'https://api.numnumtheory.com/downloads/numnum-contributor.apk'
+const EXPERT_WEBAPP_URL = 'https://expert.numnumtheory.com'
 
 export function Downloads() {
   const [state, setState] = useState<LoadState>('loading')
@@ -68,9 +69,14 @@ export function Downloads() {
             <a className="downloads-button" href={EXPERT_APK_URL}>
               Download Expert APK
             </a>
-            <button type="button" className="downloads-badge-disabled" disabled aria-disabled="true">
-              Web Dashboard — Coming Soon
-            </button>
+            <a
+              className="downloads-link-secondary"
+              href={EXPERT_WEBAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Web Dashboard
+            </a>
           </div>
         </div>,
       )
